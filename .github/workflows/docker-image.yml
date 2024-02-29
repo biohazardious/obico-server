@@ -10,4 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker-compose -f ./docker-compose.yml -p "Obico Server" up -d
+      run:  |
+        docker login --username biohazardious --password ${{ secrets.GH_PAT }} ghcr.io
+        docker-compose -f ./docker-compose.yml build --pull
+        docker-compose -f ./docker-compose.yml push
