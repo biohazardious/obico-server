@@ -19,7 +19,7 @@ jobs:
 #        docker login --username biohazardious --password ${{ secrets.GH_PAT }} ghcr.io
 #        docker compose tag --template "ghcr.io/biohazardious/obico-server:latest" --push
     - name: publish
-      uses: pennsignals/publish_docker-compose@v0.1.1
+      uses: pennsignals/publish_docker-compose@v0.2.6-rc.1
       with:
         version: 'latest' # optional
         docker_compose: 'docker-compose.yml' # required
