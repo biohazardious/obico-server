@@ -1,4 +1,4 @@
-name: Obico Server
+name: Obico Server for GHCR
 
 on:
   release:
