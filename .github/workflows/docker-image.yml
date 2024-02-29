@@ -12,5 +12,4 @@ jobs:
     - name: Build the Docker image
       run:  |
         docker login --username biohazardious --password ${{ secrets.GH_PAT }} ghcr.io
-        docker-compose -f ./docker-compose.yml build --pull
-        docker-compose -f ./docker-compose.yml push
+        docker compose tag --template "ghcr.io/biohazardious/obico-server:latest" --push
