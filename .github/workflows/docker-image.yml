@@ -13,14 +13,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-#    - uses: actions/checkout@v3
-#    - name: Build and Push image
-#      run:  |
-#        docker login --username biohazardious --password ${{ secrets.GH_PAT }} ghcr.io
-#        docker compose tag --template "ghcr.io/biohazardious/obico-server:latest" --push
-    - name: publish
-      uses: soltys/publish-docker-compose@v1.0.0
-      with:
-        version: 'latest'
-        docker_compose: 'docker-compose.yml'
-        repo_token: "${{ secrets.GH_PAT }}"
+    - uses: actions/checkout@v3
+    - name: Build and Push image
+      run:  |
+        docker login --username biohazardious --password ${{ secrets.GH_PAT }} ghcr.io
+        docker compose up --no-start --remove-orphans
+        IMAGES=$(docker-compose images -q)
+        
+        echo "IMAGES: $IMAGES"
+        
+        for IMAGE in $IMAGES; do
+            echo "IMAGE: $IMAGE"
+            NAME=$(basename biohazardious).$(docker inspect --format '{{ index .RepoTags 0 }}' $IMAGE | awk -F ":" '{ print $1}')
+            TAG="ghcr.io/biohazardious/$NAME:latest"
+        
+            docker tag $IMAGE $TAG
+            docker push $TAG
+        done
